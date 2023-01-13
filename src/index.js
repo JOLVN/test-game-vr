@@ -25,6 +25,7 @@ const sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xbbbb44 });
 
 const spheres = [];
 let sphereIdx = 0;
+let controller;
 
 const container = document.getElementById('container');
 
@@ -311,24 +312,17 @@ function updateSpheres(deltaTime) {
             sphere.collider.center.add(result.normal.multiplyScalar(result.depth));
 
         } else {
-
             sphere.velocity.y -= GRAVITY * deltaTime;
-
         }
-
         const damping = Math.exp(- 1.5 * deltaTime) - 1;
         sphere.velocity.addScaledVector(sphere.velocity, damping);
-
         playerSphereCollision(sphere);
-
     });
 
     spheresCollisions();
 
     for (const sphere of spheres) {
-
         sphere.mesh.position.copy(sphere.collider.center);
-
     }
 
 }
@@ -432,6 +426,25 @@ function teleportPlayerIfOob() {
 
 renderer.setAnimationLoop(animate)
 
+setController()
+
+function setController() {
+    controller = renderer.xr.getController(0);
+    scene.add(controller);
+
+    const controllerModelFactory = new XRControllerModelFactory();
+    const handModelFactory = new XRHandModelFactory();
+
+    const controllerGrip = renderer.xr.getControllerGrip(0);
+    controllerGrip.add(controllerModelFactory.createControllerModel(controllerGrip));
+    scene.add(controllerGrip);
+
+    const hand = renderer.xr.getHand(0);
+    hand.add(handModelFactory.createHandModel(hand));
+
+    scene.add(hand);
+}
+
 function animate() {
 
     const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME
@@ -444,5 +457,4 @@ function animate() {
     }
 
     renderer.render(scene, camera)
-    // requestAnimationFrame(animate)
 }
