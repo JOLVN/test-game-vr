@@ -6,6 +6,8 @@ import { VRButton } from 'three/examples/jsm/webxr/VRButton'
 import { Octree } from './libs/Octree.js';
 import { OctreeHelper } from './libs/OctreeHelper.js';
 import { Capsule } from './libs/Capsule.js';
+import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
+import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory';
 
 /**
  * CONSTANTS
@@ -143,8 +145,8 @@ document.body.addEventListener('mousemove', (event) => {
 
     if (document.pointerLockElement === document.body) {
 
-        camera.rotation.y -= event.movementX / 500;
-        camera.rotation.x -= event.movementY / 500;
+        camera.rotation.y -= event.movementX / 500
+        camera.rotation.x -= event.movementY / 500
 
     }
 
@@ -353,25 +355,22 @@ function getSideVector() {
 }
 
 function controls(deltaTime) {
-
     // gives a bit of air control
     const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
 
     if (keyStates['KeyW']) {
-
-        playerVelocity.add(getForwardVector().multiplyScalar(speedDelta));
-
+        playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
     }
 
     if (keyStates['KeyS']) {
 
-        playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta));
+        playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta))
 
     }
 
     if (keyStates['KeyA']) {
 
-        playerVelocity.add(getSideVector().multiplyScalar(- speedDelta));
+        playerVelocity.add(getSideVector().multiplyScalar(- speedDelta))
 
     }
 
@@ -382,15 +381,10 @@ function controls(deltaTime) {
     }
 
     if (playerOnFloor) {
-
         if (keyStates['Space']) {
-
             playerVelocity.y = 15;
-
         }
-
     }
-
 }
 
 const loader = new GLTFLoader().setPath('./models/gltf/');
@@ -427,32 +421,28 @@ loader.load('collision-world.glb', (gltf) => {
 });
 
 function teleportPlayerIfOob() {
-
     if (camera.position.y <= - 25) {
-
         playerCollider.start.set(0, 0.35, 0);
         playerCollider.end.set(0, 1, 0);
         playerCollider.radius = 0.35;
         camera.position.copy(playerCollider.end);
         camera.rotation.set(0, 0, 0);
-
     }
-
 }
 
-renderer.setAnimationLoop(animate())
+renderer.setAnimationLoop(animate)
 
 function animate() {
 
-    const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME;
+    const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME
 
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
-        controls(deltaTime);
-        updatePlayer(deltaTime);
-        updateSpheres(deltaTime);
-        teleportPlayerIfOob();
+        controls(deltaTime)
+        updatePlayer(deltaTime)
+        updateSpheres(deltaTime)
+        teleportPlayerIfOob()
     }
 
-    renderer.render(scene, camera);
-    requestAnimationFrame(animate);
+    renderer.render(scene, camera)
+    // requestAnimationFrame(animate)
 }
