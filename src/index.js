@@ -25,7 +25,6 @@ const sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xbbbb44 });
 
 const spheres = [];
 let sphereIdx = 0;
-let controller;
 
 const container = document.getElementById('container');
 
@@ -238,7 +237,6 @@ function playerSphereCollision(sphere) {
     const r = playerCollider.radius + sphere.collider.radius;
     const r2 = r * r;
 
-    // approximation: player = 3 spheres
 
     for (const point of [playerCollider.start, playerCollider.end, center]) {
 
@@ -338,14 +336,12 @@ function getForwardVector() {
 }
 
 function getSideVector() {
-
     camera.getWorldDirection(playerDirection);
     playerDirection.y = 0;
     playerDirection.normalize();
     playerDirection.cross(camera.up);
 
     return playerDirection;
-
 }
 
 function controls(deltaTime) {
@@ -357,21 +353,15 @@ function controls(deltaTime) {
     }
 
     if (keyStates['KeyS']) {
-
         playerVelocity.add(getForwardVector().multiplyScalar(- speedDelta))
-
     }
 
     if (keyStates['KeyA']) {
-
         playerVelocity.add(getSideVector().multiplyScalar(- speedDelta))
-
     }
 
     if (keyStates['KeyD']) {
-
         playerVelocity.add(getSideVector().multiplyScalar(speedDelta));
-
     }
 
     if (playerOnFloor) {
@@ -397,13 +387,9 @@ loader.load('collision-world.glb', (gltf) => {
             child.receiveShadow = true;
 
             if (child.material.map) {
-
                 child.material.map.anisotropy = 4;
-
             }
-
         }
-
     });
 
     const helper = new OctreeHelper(worldOctree);
@@ -429,20 +415,33 @@ renderer.setAnimationLoop(animate)
 setController()
 
 function setController() {
-    controller = renderer.xr.getController(0);
-    scene.add(controller);
-
     const controllerModelFactory = new XRControllerModelFactory();
     const handModelFactory = new XRHandModelFactory();
 
-    const controllerGrip = renderer.xr.getControllerGrip(0);
-    controllerGrip.add(controllerModelFactory.createControllerModel(controllerGrip));
-    scene.add(controllerGrip);
+    const controller1 = renderer.xr.getController(0);
+    const controller2 = renderer.xr.getController(0);
+    scene.add(controller1, controller2);
 
-    const hand = renderer.xr.getHand(0);
-    hand.add(handModelFactory.createHandModel(hand));
+    const controllerGrip1 = renderer.xr.getControllerGrip(0);
+    controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
+    const controllerGrip2 = renderer.xr.getControllerGrip(1);
+    controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
+    scene.add(controllerGrip1, controllerGrip2);
 
-    scene.add(hand);
+    controller2.addEventListener('connected', (event) => {
+        throwBall()
+    })
+    controller2.addEventListener('disconnected', () => {
+
+    })
+
+    const hand1 = renderer.xr.getHand(0);
+    hand1.add(handModelFactory.createHandModel(hand1));
+
+    const hand2 = renderer.xr.getHand(1);
+    hand2.add(handModelFactory.createHandModel(hand2));
+
+    scene.add(hand2);
 }
 
 function animate() {
