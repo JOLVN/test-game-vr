@@ -177,7 +177,6 @@ function throwBall(controller) {
 
     sphere.velocity.copy(playerDirection).multiplyScalar(impulse);
     sphere.velocity.addScaledVector(playerVelocity, 2);
-    if (controller) sphere.velocity.applyQuaternion(controller.quaternion);
 
     sphereIdx = (sphereIdx + 1) % spheres.length;
 
