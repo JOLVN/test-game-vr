@@ -163,11 +163,12 @@ function onWindowResize() {
 
 }
 
-function throwBall() {
+function throwBall(controller) {
 
     const sphere = spheres[sphereIdx];
 
     camera.getWorldDirection(playerDirection);
+    if (controller) playerDirection = controller
 
     sphere.collider.center.copy(playerCollider.end).addScaledVector(playerDirection, playerCollider.radius * 1.5);
 
