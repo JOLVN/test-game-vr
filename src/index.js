@@ -168,7 +168,7 @@ function throwBall(controller) {
     const sphere = spheres[sphereIdx];
 
     camera.getWorldDirection(playerDirection);
-    if (controller) playerDirection = controller
+    if (controller) playerDirection = controller.position
 
     sphere.collider.center.copy(playerCollider.end).addScaledVector(playerDirection, playerCollider.radius * 1.5);
 
@@ -430,7 +430,7 @@ function setController() {
     scene.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', (event) => {
-        throwBall()
+        throwBall(controller2)
     })
     controller2.addEventListener('disconnected', () => {
 
