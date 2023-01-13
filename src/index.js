@@ -169,10 +169,9 @@ function throwBall(controller) {
 
     camera.getWorldDirection(playerDirection);
 
-    sphere.collider.center.copy(playerCollider.end).addScaledVector(playerDirection, playerCollider.radius * 1.5);
-    console.log(sphere);
+    // sphere.collider.center.copy(playerCollider.end).addScaledVector(playerDirection, playerCollider.radius * 1.5);
     if (controller) sphere.position.copy(controller.position)
-    if (controller) sphere.velocity.applyQuaternion(controller.quaternion);
+    if (controller) sphere.velocity.applyQuaternion(controller.quaternion)
     // throw the ball with more force if we hold the button longer, and if we move forward
 
     else {
