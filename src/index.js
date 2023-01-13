@@ -168,7 +168,7 @@ function throwBall(controller) {
     const sphere = spheres[sphereIdx]
 
     camera.getWorldDirection(playerDirection)
-    const direction = controller ? new THREE.Vector3(controller.quaternion.xyz) : playerDirection
+    const direction = controller ? controller.position : playerDirection
 
     sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
 
