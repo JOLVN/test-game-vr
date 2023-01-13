@@ -428,7 +428,7 @@ function setController() {
     controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
     scene.add(controllerGrip1, controllerGrip2);
 
-    controller2.addEventListener('connected', (event) => {
+    controller2.addEventListener('selectstart', (event) => {
         throwBall()
     })
     controller2.addEventListener('disconnected', () => {
