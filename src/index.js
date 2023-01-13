@@ -165,26 +165,18 @@ function onWindowResize() {
 
 function throwBall(controller) {
 
-    const sphere = spheres[sphereIdx];
+    const sphere = spheres[sphereIdx]
 
-    camera.getWorldDirection(playerDirection);
+    camera.getWorldDirection(playerDirection)
+    const direction = controller ? controller.direction : playerDirection
 
-    sphere.collider.center.copy(playerCollider.end).addScaledVector(playerDirection, playerCollider.radius * 1.5);
-    console.log(playerCollider);
-    if (controller) {
-        const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001));
-        sphere.velocity.applyQuaternion(controller.quaternion).multiplyScalar(impulse);
-        sphere.velocity.addScaledVector(playerVelocity, 2);
-    }
-    // throw the ball with more force if we hold the button longer, and if we move forward
+    sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
 
-    else {
-        const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001));
-        sphere.velocity.copy(playerDirection).multiplyScalar(impulse);
-        sphere.velocity.addScaledVector(playerVelocity, 2);
-    }
+    const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    sphere.velocity.copy(direction).multiplyScalar(impulse)
+    sphere.velocity.addScaledVector(playerVelocity, 2)
 
-    sphereIdx = (sphereIdx + 1) % spheres.length;
+    sphereIdx = (sphereIdx + 1) % spheres.length
 
 }
 
