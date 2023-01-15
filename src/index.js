@@ -172,10 +172,12 @@ function throwBall(controller) {
 
     sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
 
-    const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     if (controller) sphere.velocity.applyQuaternion(controller.quaternion);
-    sphere.velocity.copy(direction).multiplyScalar(impulse)
-    sphere.velocity.addScaledVector(playerVelocity, 2)
+    else {
+        const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+        sphere.velocity.copy(direction).multiplyScalar(impulse)
+        sphere.velocity.addScaledVector(playerVelocity, 2)
+    }
 
     sphereIdx = (sphereIdx + 1) % spheres.length
 }
