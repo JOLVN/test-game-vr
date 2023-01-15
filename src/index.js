@@ -165,18 +165,18 @@ function onWindowResize() {
 
 function throwBall(controller) {
 
-    const radius = 0.08;
-    const geometry = new THREE.IcosahedronGeometry(radius, 3);
-    const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-    scene.add(object)
+    // const radius = 0.08;
+    // const geometry = new THREE.IcosahedronGeometry(radius, 3);
+    // const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+    // scene.add(object)
 
-    const sphere = {
-        mesh: object,
-        collider: new THREE.Sphere(new THREE.Vector3(0, - 100, 0), SPHERE_RADIUS),
-        velocity: new THREE.Vector3()
-    }
+    // const sphere = {
+    //     mesh: object,
+    //     collider: new THREE.Sphere(new THREE.Vector3(0, - 100, 0), SPHERE_RADIUS),
+    //     velocity: new THREE.Vector3()
+    // }
 
-    // const sphere = spheres[sphereIdx]
+    const sphere = spheres[sphereIdx]
 
     camera.getWorldDirection(playerDirection)
     const direction = controller ? controller.position : playerDirection
@@ -340,7 +340,7 @@ function updateSpheres(deltaTime) {
         }
         const damping = Math.exp(- 1.5 * deltaTime) - 1;
         sphere.velocity.addScaledVector(sphere.velocity, damping);
-        playerSphereCollision(sphere);
+        // playerSphereCollision(sphere);
     });
 
     spheresCollisions();
