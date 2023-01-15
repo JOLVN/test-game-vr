@@ -167,8 +167,14 @@ function throwBall(controller) {
 
     const radius = 0.08;
     const geometry = new THREE.IcosahedronGeometry(radius, 3);
-    const sphere = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-    scene.add(sphere)
+    const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+    scene.add(object)
+
+    const sphere = {
+        mesh: object,
+        collider: new THREE.Sphere(new THREE.Vector3(0, - 100, 0), SPHERE_RADIUS),
+        velocity: new THREE.Vector3()
+    }
 
     // const sphere = spheres[sphereIdx]
 
@@ -474,10 +480,6 @@ function animate() {
         updateSpheres(deltaTime)
         teleportPlayerIfOob()
     }
-
-    object.position.x += object.userData.velocity.x * delta;
-    object.position.y += object.userData.velocity.y * delta;
-    object.position.z += object.userData.velocity.z * delta;
 
     renderer.render(scene, camera)
 }
