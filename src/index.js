@@ -165,31 +165,41 @@ function onWindowResize() {
 
 function throwBall(controller) {
 
-    // const sphere = spheres[sphereIdx]
-
-    // camera.getWorldDirection(playerDirection)
-    // const direction = controller ? controller.position : playerDirection
-
-    // sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
-
-    // if (controller) sphere.velocity.applyQuaternion(controller.quaternion);
-    // else {
-    //     const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
-    //     sphere.velocity.copy(direction).multiplyScalar(impulse)
-    //     sphere.velocity.addScaledVector(playerVelocity, 2)
-    // }
-
-    // sphereIdx = (sphereIdx + 1) % spheres.length
     const radius = 0.08;
     const geometry = new THREE.IcosahedronGeometry(radius, 3);
-    const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-    scene.add(object)
+    const sphere = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
+    scene.add(sphere)
 
-    object.position.copy(controller.position);
-    object.userData.velocity.x = (Math.random() - 0.5) * 3;
-    object.userData.velocity.y = (Math.random() - 0.5) * 3;
-    object.userData.velocity.z = (Math.random() - 9);
-    object.userData.velocity.applyQuaternion(controller.quaternion);
+    // const sphere = spheres[sphereIdx]
+
+    camera.getWorldDirection(playerDirection)
+    const direction = controller ? controller.position : playerDirection
+
+    sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
+
+    if (controller) {
+        sphere.velocity.x = (Math.random() - 0.5) * 3;
+        sphere.velocity.y = (Math.random() - 0.5) * 3;
+        sphere.velocity.z = (Math.random() - 9);
+        sphere.velocity.applyQuaternion(controller.quaternion);
+    }
+    else {
+        const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+        sphere.velocity.copy(direction).multiplyScalar(impulse)
+        sphere.velocity.addScaledVector(playerVelocity, 2)
+    }
+
+    sphereIdx = (sphereIdx + 1) % spheres.length
+
+
+
+    // object.position.copy(controller.position);
+    // object.userData.velocity.x = (Math.random() - 0.5) * 3;
+    // object.userData.velocity.y = (Math.random() - 0.5) * 3;
+    // object.userData.velocity.z = (Math.random() - 9);
+    // object.userData.velocity.applyQuaternion(controller.quaternion);
+
+
 }
 
 function playerCollisions() {
@@ -464,6 +474,10 @@ function animate() {
         updateSpheres(deltaTime)
         teleportPlayerIfOob()
     }
+
+    object.position.x += object.userData.velocity.x * delta;
+    object.position.y += object.userData.velocity.y * delta;
+    object.position.z += object.userData.velocity.z * delta;
 
     renderer.render(scene, camera)
 }
