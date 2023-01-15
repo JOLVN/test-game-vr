@@ -186,7 +186,7 @@ function throwBall(controller) {
         // sphere.velocity.x = (Math.random() - 0.5) * 3;
         // sphere.velocity.y = (Math.random() - 0.5) * 3;
         // sphere.velocity.z = (Math.random() - 9);
-        sphere.velocity.applyQuaternion(controller.quaternion);
+        // sphere.velocity.applyQuaternion(controller.quaternion);
     }
     else {
         sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
