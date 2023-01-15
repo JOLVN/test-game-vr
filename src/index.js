@@ -20,7 +20,7 @@ const SPHERE_RADIUS = 0.2;
 
 const STEPS_PER_FRAME = 5;
 
-const sphereGeometry = new THREE.IcosahedronGeometry(SPHERE_RADIUS, 5);
+const sphereGeometry = new THREE.BoxGeometry(SPHERE_RADIUS, SPHERE_RADIUS, SPHERE_RADIUS);
 const sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xbbbb44 });
 
 const spheres = [];
@@ -128,11 +128,8 @@ document.addEventListener('keyup', (event) => {
 });
 
 container.addEventListener('mousedown', () => {
-
     document.body.requestPointerLock();
-
     mouseTime = performance.now();
-
 });
 
 document.addEventListener('mouseup', () => {
@@ -184,9 +181,9 @@ function throwBall(controller) {
 
     if (controller) {
         sphere.collider.center.copy(controller.position)
-        sphere.velocity.x = (Math.random() - 0.5) * 5;
-        sphere.velocity.y = (Math.random() - 0.5) * 5;
-        sphere.velocity.z = (Math.random() - 9);
+        sphere.velocity.x = (Math.random() - 0.5) * 3;
+        sphere.velocity.y = (Math.random() - 0.5) * 3;
+        sphere.velocity.z = (Math.random() - 6);
         sphere.velocity.applyQuaternion(controller.quaternion);
     }
     else {
@@ -341,7 +338,7 @@ function updateSpheres(deltaTime) {
         }
         const damping = Math.exp(- 1.5 * deltaTime) - 1;
         sphere.velocity.addScaledVector(sphere.velocity, damping);
-        // playerSphereCollision(sphere);
+        playerSphereCollision(sphere);
     });
 
     spheresCollisions();
@@ -477,7 +474,7 @@ function animate() {
 
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
         controls(deltaTime)
-        // updatePlayer(deltaTime)
+        updatePlayer(deltaTime)
         updateSpheres(deltaTime)
         teleportPlayerIfOob()
     }
