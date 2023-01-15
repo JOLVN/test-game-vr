@@ -179,7 +179,7 @@ function throwBall(controller) {
     const direction = controller ? controller.position : playerDirection
 
 
-    const impulse = controller ? 20 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    const impulse = controller ? 32 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     sphere.velocity.copy(direction).multiplyScalar(impulse)
     if (controller) {
         sphere.collider.center.copy(controller.position)
