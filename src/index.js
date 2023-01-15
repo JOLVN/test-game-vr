@@ -476,7 +476,7 @@ function animate() {
 
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
         controls(deltaTime)
-        updatePlayer(deltaTime)
+        // updatePlayer(deltaTime)
         updateSpheres(deltaTime)
         teleportPlayerIfOob()
     }
