@@ -179,23 +179,21 @@ function throwBall(controller) {
     const direction = controller ? controller.position : playerDirection
 
 
+    const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    sphere.velocity.copy(direction).multiplyScalar(impulse)
     if (controller) {
         sphere.collider.center.copy(controller.position)
-        sphere.velocity.x = (Math.random() - 0.5) * 3;
-        sphere.velocity.y = (Math.random() - 0.5) * 3;
-        sphere.velocity.z = (Math.random() - 6);
+        // sphere.velocity.x = (Math.random() - 0.5) * 3;
+        // sphere.velocity.y = (Math.random() - 0.5) * 3;
+        // sphere.velocity.z = (Math.random() - 9);
         sphere.velocity.applyQuaternion(controller.quaternion);
     }
     else {
-        const impulse = 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
-        sphere.velocity.copy(direction).multiplyScalar(impulse)
         sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
         sphere.velocity.addScaledVector(playerVelocity, 2)
     }
 
     sphereIdx = (sphereIdx + 1) % spheres.length
-
-
 
     // object.position.copy(controller.position);
     // object.userData.velocity.x = (Math.random() - 0.5) * 3;
