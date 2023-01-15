@@ -8,7 +8,6 @@ import { OctreeHelper } from './libs/OctreeHelper.js';
 import { Capsule } from './libs/Capsule.js';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory';
-import FirstPersonVRControls from 'three-firstperson-vr-controls/FirstPersonVRControls.js';
 
 /**
  * CONSTANTS
@@ -26,6 +25,8 @@ const cubeGeometry = new THREE.BoxGeometry(CUBE_RADIUS, CUBE_RADIUS, CUBE_RADIUS
 const cubes = [];
 let cubeIdx = 0;
 
+let cameraMoving = false;
+
 const container = document.getElementById('container');
 
 
@@ -42,13 +43,13 @@ scene.fog = new THREE.Fog(0x88ccee, 0, 50);
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
 
-const rig = new THREE.Object3D();
-rig.add(camera);
-scene.add(rig);
+// VR Camera
+const dolly = new THREE.Object3D()
+dolly.position.z = 0.5
+dolly.add(camera)
 
-const fpVrControls = new FirstPersonVRControls(camera, scene, rig);
-// You can also enable strafing, set movementSpeed, snapAngle and boostFactor.
-fpVrControls.strafing = true;
+const dollyCam = new THREE.Object3D()
+camera.add(dollyCam)
 
 /**
  * LIGHTS
@@ -437,11 +438,15 @@ function setController() {
     controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
     scene.add(controllerGrip1, controllerGrip2);
 
-    controller2.addEventListener('selectstart', (event) => {
+    controller2.addEventListener('selectstart', () => {
         throwBall(controller2)
     })
-    controller2.addEventListener('disconnected', () => {
 
+    controller1.addEventListener('selectstart', () => {
+        cameraMoving = true
+    })
+    controller1.addEventListener('selectstart', () => {
+        cameraMoving = false
     })
 
     const hand1 = renderer.xr.getHand(0);
@@ -450,7 +455,17 @@ function setController() {
     const hand2 = renderer.xr.getHand(1);
     hand2.add(handModelFactory.createHandModel(hand2));
 
+    scene.add(hand1);
     scene.add(hand2);
+}
+
+function moveCamera(deltaTime) {
+    const speed = 2
+    const quaternion = dolly.quaternion.clone()
+    dolly.quaternion.copy(dummyCam.getWorldDirection())
+    dolly.translateZ(-deltaTime * speed)
+    dolly.position.y = 0
+    dolly.quaternion.copy(quaternion)
 }
 
 function animate() {
@@ -464,7 +479,7 @@ function animate() {
         teleportPlayerIfOob()
     }
 
-    fpVrControls.update(clock.getDelta());
+    if (cameraMoving) moveCamera(clock.getDelta())
 
     renderer.render(scene, camera)
 }
