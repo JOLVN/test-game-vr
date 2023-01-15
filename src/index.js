@@ -8,6 +8,7 @@ import { OctreeHelper } from './libs/OctreeHelper.js';
 import { Capsule } from './libs/Capsule.js';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory';
+import FirstPersonVRControls from 'three-firstperson-vr-controls/FirstPersonVRControls.js';
 
 /**
  * CONSTANTS
@@ -15,15 +16,15 @@ import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory'
 
 const GRAVITY = 30;
 
-const NUM_SPHERES = 100;
-const SPHERE_RADIUS = 0.2;
+const NUM_CUBES = 100;
+const CUBE_RADIUS = 0.2;
 
 const STEPS_PER_FRAME = 5;
 
-const sphereGeometry = new THREE.BoxGeometry(SPHERE_RADIUS, SPHERE_RADIUS, SPHERE_RADIUS);
+const cubeGeometry = new THREE.BoxGeometry(CUBE_RADIUS, CUBE_RADIUS, CUBE_RADIUS);
 
-const spheres = [];
-let sphereIdx = 0;
+const cubes = [];
+let cubeIdx = 0;
 
 const container = document.getElementById('container');
 
@@ -40,6 +41,14 @@ scene.fog = new THREE.Fog(0x88ccee, 0, 50);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
+
+const rig = new THREE.Object3D();
+rig.add(camera);
+scene.add(rig);
+
+const fpVrControls = new FirstPersonVRControls(camera, scene, rig);
+// You can also enable strafing, set movementSpeed, snapAngle and boostFactor.
+fpVrControls.strafing = true;
 
 /**
  * LIGHTS
@@ -82,18 +91,18 @@ const button = VRButton.createButton(renderer)
 container.appendChild(button)
 
 
-for (let i = 0; i < NUM_SPHERES; i++) {
+for (let i = 0; i < NUM_CUBES; i++) {
 
-    const sphereMaterial = new THREE.MeshLambertMaterial({ color: new THREE.Color(Math.random(), Math.random(), Math.random()) });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.castShadow = true;
-    sphere.receiveShadow = true;
+    const cubeMaterial = new THREE.MeshLambertMaterial({ color: new THREE.Color(Math.random(), Math.random(), Math.random()) });
+    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.castShadow = true;
+    cube.receiveShadow = true;
 
-    scene.add(sphere);
+    scene.add(cube);
 
-    spheres.push({
-        mesh: sphere,
-        collider: new THREE.Sphere(new THREE.Vector3(0, - 100, 0), SPHERE_RADIUS),
+    cubes.push({
+        mesh: cube,
+        collider: new THREE.Sphere(new THREE.Vector3(0, - 100, 0), CUBE_RADIUS),
         velocity: new THREE.Vector3()
     });
 
@@ -162,45 +171,23 @@ function onWindowResize() {
 
 function throwBall(controller) {
 
-    // const radius = 0.08;
-    // const geometry = new THREE.IcosahedronGeometry(radius, 3);
-    // const object = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({ color: Math.random() * 0xffffff }));
-    // scene.add(object)
-
-    // const sphere = {
-    //     mesh: object,
-    //     collider: new THREE.Sphere(new THREE.Vector3(0, -100, 0), SPHERE_RADIUS),
-    //     velocity: new THREE.Vector3()
-    // }
-
-    const sphere = spheres[sphereIdx]
+    const cube = cubes[cubeIdx]
 
     camera.getWorldDirection(playerDirection)
     const direction = controller ? controller.position : playerDirection
 
 
-    const impulse = controller ? 32 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
-    sphere.velocity.copy(direction).multiplyScalar(impulse)
+    const impulse = controller ? 35 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    cube.velocity.copy(direction).multiplyScalar(impulse)
     if (controller) {
-        sphere.collider.center.copy(controller.position)
-        // sphere.velocity.x = (Math.random() - 0.5) * 3;
-        // sphere.velocity.y = (Math.random() - 0.5) * 3;
-        // sphere.velocity.z = (Math.random() - 9);
-        // sphere.velocity.applyQuaternion(controller.quaternion);
+        cube.collider.center.copy(controller.position)
     }
     else {
-        sphere.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
-        sphere.velocity.addScaledVector(playerVelocity, 2)
+        cube.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
+        cube.velocity.addScaledVector(playerVelocity, 2)
     }
 
-    sphereIdx = (sphereIdx + 1) % spheres.length
-
-    // object.position.copy(controller.position);
-    // object.userData.velocity.x = (Math.random() - 0.5) * 3;
-    // object.userData.velocity.y = (Math.random() - 0.5) * 3;
-    // object.userData.velocity.z = (Math.random() - 9);
-    // object.userData.velocity.applyQuaternion(controller.quaternion);
-
+    cubeIdx = (cubeIdx + 1) % cubes.length
 
 }
 
@@ -250,31 +237,31 @@ function updatePlayer(deltaTime) {
 
 }
 
-function playerSphereCollision(sphere) {
+function playerCubeCollision(cube) {
 
     const center = vector1.addVectors(playerCollider.start, playerCollider.end).multiplyScalar(0.5);
 
-    const sphere_center = sphere.collider.center;
+    const cube_center = cube.collider.center;
 
-    const r = playerCollider.radius + sphere.collider.radius;
+    const r = playerCollider.radius + cube.collider.radius;
     const r2 = r * r;
 
 
     for (const point of [playerCollider.start, playerCollider.end, center]) {
 
-        const d2 = point.distanceToSquared(sphere_center);
+        const d2 = point.distanceToSquared(cube_center);
 
         if (d2 < r2) {
 
-            const normal = vector1.subVectors(point, sphere_center).normalize();
+            const normal = vector1.subVectors(point, cube_center).normalize();
             const v1 = vector2.copy(normal).multiplyScalar(normal.dot(playerVelocity));
-            const v2 = vector3.copy(normal).multiplyScalar(normal.dot(sphere.velocity));
+            const v2 = vector3.copy(normal).multiplyScalar(normal.dot(cube.velocity));
 
             playerVelocity.add(v2).sub(v1);
-            sphere.velocity.add(v1).sub(v2);
+            cube.velocity.add(v1).sub(v2);
 
             const d = (r - Math.sqrt(d2)) / 2;
-            sphere_center.addScaledVector(normal, - d);
+            cube_center.addScaledVector(normal, - d);
 
         }
 
@@ -282,15 +269,15 @@ function playerSphereCollision(sphere) {
 
 }
 
-function spheresCollisions() {
+function cubesCollisions() {
 
-    for (let i = 0, length = spheres.length; i < length; i++) {
+    for (let i = 0, length = cubes.length; i < length; i++) {
 
-        const s1 = spheres[i];
+        const s1 = cubes[i];
 
         for (let j = i + 1; j < length; j++) {
 
-            const s2 = spheres[j];
+            const s2 = cubes[j];
 
             const d2 = s1.collider.center.distanceToSquared(s2.collider.center);
             const r = s1.collider.radius + s2.collider.radius;
@@ -318,31 +305,31 @@ function spheresCollisions() {
 
 }
 
-function updateSpheres(deltaTime) {
+function updateCubes(deltaTime) {
 
-    spheres.forEach(sphere => {
+    cubes.forEach(cube => {
 
-        sphere.collider.center.addScaledVector(sphere.velocity, deltaTime);
+        cube.collider.center.addScaledVector(cube.velocity, deltaTime);
 
-        const result = worldOctree.sphereIntersect(sphere.collider);
+        const result = worldOctree.sphereIntersect(cube.collider);
 
         if (result) {
 
-            sphere.velocity.addScaledVector(result.normal, - result.normal.dot(sphere.velocity) * 1.5);
-            sphere.collider.center.add(result.normal.multiplyScalar(result.depth));
+            cube.velocity.addScaledVector(result.normal, - result.normal.dot(cube.velocity) * 1.5);
+            cube.collider.center.add(result.normal.multiplyScalar(result.depth));
 
         } else {
-            sphere.velocity.y -= GRAVITY * deltaTime;
+            cube.velocity.y -= GRAVITY * deltaTime;
         }
         const damping = Math.exp(- 1.5 * deltaTime) - 1;
-        sphere.velocity.addScaledVector(sphere.velocity, damping);
-        playerSphereCollision(sphere);
+        cube.velocity.addScaledVector(cube.velocity, damping);
+        playerCubeCollision(cube);
     });
 
-    spheresCollisions();
+    cubesCollisions();
 
-    for (const sphere of spheres) {
-        sphere.mesh.position.copy(sphere.collider.center);
+    for (const cube of cubes) {
+        cube.mesh.position.copy(cube.collider.center);
     }
 
 }
@@ -473,9 +460,11 @@ function animate() {
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
         controls(deltaTime)
         updatePlayer(deltaTime)
-        updateSpheres(deltaTime)
+        updateCubes(deltaTime)
         teleportPlayerIfOob()
     }
+
+    fpVrControls.update(clock.getDelta());
 
     renderer.render(scene, camera)
 }
