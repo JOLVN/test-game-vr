@@ -21,7 +21,6 @@ const SPHERE_RADIUS = 0.2;
 const STEPS_PER_FRAME = 5;
 
 const sphereGeometry = new THREE.BoxGeometry(SPHERE_RADIUS, SPHERE_RADIUS, SPHERE_RADIUS);
-const sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xbbbb44 });
 
 const spheres = [];
 let sphereIdx = 0;
@@ -85,6 +84,7 @@ container.appendChild(button)
 
 for (let i = 0; i < NUM_SPHERES; i++) {
 
+    const sphereMaterial = new THREE.MeshLambertMaterial({ color: new THREE.Color(Math.random(), Math.random(), Math.random()) });
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
     sphere.castShadow = true;
     sphere.receiveShadow = true;
@@ -179,7 +179,7 @@ function throwBall(controller) {
     const direction = controller ? controller.position : playerDirection
 
 
-    const impulse = controller ? 40 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    const impulse = controller ? 20 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     sphere.velocity.copy(direction).multiplyScalar(impulse)
     if (controller) {
         sphere.collider.center.copy(controller.position)
