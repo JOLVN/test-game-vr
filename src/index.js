@@ -445,7 +445,7 @@ function setController() {
     controller1.addEventListener('selectstart', () => {
         cameraMoving = true
     })
-    controller1.addEventListener('selectstart', () => {
+    controller1.addEventListener('selectend', () => {
         cameraMoving = false
     })
 
@@ -479,7 +479,10 @@ function animate() {
         teleportPlayerIfOob()
     }
 
-    if (cameraMoving) moveCamera(clock.getDelta())
+    if (cameraMoving) {
+        console.log('move');
+        moveCamera(clock.getDelta())
+    }
 
     renderer.render(scene, camera)
 }
