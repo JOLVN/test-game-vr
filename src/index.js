@@ -42,6 +42,7 @@ scene.fog = new THREE.Fog(0x000000, 0, 50);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
+camera.position.set(0, 0, 0)
 
 // VR Camera
 const dolly = new THREE.Object3D()
@@ -235,8 +236,7 @@ function updatePlayer(deltaTime) {
 
     playerCollisions();
 
-    camera.position.copy(playerCollider.end);
-
+    dolly.position.copy(playerCollider.end);
 }
 
 function playerCubeCollision(cube) {
@@ -430,7 +430,8 @@ function setController() {
     const handModelFactory = new XRHandModelFactory();
 
     const controller1 = renderer.xr.getController(0);
-    const controller2 = renderer.xr.getController(0);
+    const controller2 = renderer.xr.getController(1);
+    dolly.add(controller2);
     scene.add(controller1, controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
@@ -461,26 +462,35 @@ function setController() {
 }
 
 function moveCamera(deltaTime) {
-    const speed = 2
-    const quaternion = dolly.quaternion.clone()
-    // dolly.quaternion.copy(dummyCam.getWorldQuaternion())
-    dolly.translateZ(-deltaTime * speed)
-    dolly.position.y = 0
+    // const speed = 4
+    // const quaternion = dolly.quaternion.clone()
+    // console.log(dummyCam)
+    // // dolly.quaternion.copy(dummyCam.getWorldQuaternion())
+    // dolly.translateZ(-deltaTime * speed)
+    // dolly.position.y = 0
 
-    // Restore original rotation
-    dolly.quaternion.copy(quaternion)
-    console.log(dolly.position);
+    // // Restore original rotation
+    // dolly.quaternion.copy(quaternion)
+
+    const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
+    playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
+    console.log(camera.position);
+
 }
 
 function animate() {
 
     const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME
 
+    scene.updateMatrixWorld()
+    scene.updateWorldMatrix()
+
+
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
-        // controls(deltaTime)
-        // updatePlayer(deltaTime)
+        controls(deltaTime)
+        updatePlayer(deltaTime)
         updateCubes(deltaTime)
-        // teleportPlayerIfOob()
+        teleportPlayerIfOob()
     }
 
     if (cameraMoving) {
