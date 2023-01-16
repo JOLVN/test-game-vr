@@ -237,10 +237,10 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
     dolly.position.copy(playerCollider.end)
-    controller1.position.copy(playerCollider.end)
-    controller2.position.copy(playerCollider.end)
-    hand1.position.copy(playerCollider.end)
-    hand2.position.copy(playerCollider.end)
+    controller1.parent = dolly
+    controller2.parent = dolly
+    // hand1.parent = camera
+    // hand2.parent = camera
 }
 
 function playerCubeCollision(cube) {
@@ -475,7 +475,6 @@ function animate() {
 
     scene.updateMatrixWorld()
     scene.updateWorldMatrix()
-
 
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
         controls(deltaTime)
