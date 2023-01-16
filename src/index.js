@@ -427,6 +427,12 @@ function teleportPlayerIfOob() {
     }
 }
 
+function jump() {
+    if (playerOnFloor) {
+        playerVelocity.y = 15;
+    }
+}
+
 renderer.setAnimationLoop(animate)
 
 setController()
@@ -448,6 +454,9 @@ function setController() {
 
     controller2.addEventListener('selectstart', () => {
         cameraMoving = true
+    })
+    controller2.addEventListener('squeeze', () => {
+        jump()
     })
     controller2.addEventListener('selectend', () => {
         cameraMoving = false
