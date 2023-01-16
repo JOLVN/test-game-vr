@@ -237,10 +237,10 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
     dolly.position.copy(playerCollider.end)
-    controller1.parent = dolly
-    controller2.parent = dolly
-    // hand1.parent = camera
-    // hand2.parent = camera
+    // controller1.parent = dolly
+    // controller2.parent = dolly
+    hand1.parent = dolly
+    hand2.parent = dolly
 }
 
 function playerCubeCollision(cube) {
