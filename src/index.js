@@ -428,9 +428,9 @@ function teleportPlayerIfOob() {
 }
 
 function jump() {
-    if (playerOnFloor) {
-        playerVelocity.y = 15;
-    }
+    // if (playerOnFloor) {
+    playerVelocity.y = 15;
+    // }
 }
 
 renderer.setAnimationLoop(animate)
