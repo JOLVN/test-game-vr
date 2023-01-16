@@ -432,23 +432,23 @@ function setController() {
     const controller1 = renderer.xr.getController(0);
     const controller2 = renderer.xr.getController(1);
     dolly.add(controller2);
+    dolly.add(controller1);
     scene.add(controller1, controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
     const controllerGrip2 = renderer.xr.getControllerGrip(1);
-    controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
     scene.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
-        throwBall(controller2)
+        cameraMoving = true
+    })
+    controller2.addEventListener('selectend', () => {
+        cameraMoving = false
     })
 
     controller1.addEventListener('selectstart', () => {
-        cameraMoving = true
-    })
-    controller1.addEventListener('selectend', () => {
-        cameraMoving = false
+        throwBall(controller1)
     })
 
     const hand1 = renderer.xr.getHand(0);
@@ -457,25 +457,12 @@ function setController() {
     const hand2 = renderer.xr.getHand(1);
     hand2.add(handModelFactory.createHandModel(hand2));
 
-    scene.add(hand1);
-    scene.add(hand2);
+    scene.add(hand1, hand2);
 }
 
 function moveCamera(deltaTime) {
-    // const speed = 4
-    // const quaternion = dolly.quaternion.clone()
-    // console.log(dummyCam)
-    // // dolly.quaternion.copy(dummyCam.getWorldQuaternion())
-    // dolly.translateZ(-deltaTime * speed)
-    // dolly.position.y = 0
-
-    // // Restore original rotation
-    // dolly.quaternion.copy(quaternion)
-
     const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
     playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
-    console.log(camera.position);
-
 }
 
 function animate() {
