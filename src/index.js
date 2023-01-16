@@ -29,7 +29,7 @@ let cameraMoving = false;
 
 const container = document.getElementById('container');
 
-let controller1, controller2
+let controller1, controller2, hand1, hand2
 
 
 /**
@@ -237,8 +237,10 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
     dolly.position.copy(playerCollider.end)
-    controller1.position.multiplyScalar(playerCollider)
-    controller2.position.multiplyScalar(playerCollider.end)
+    controller1.position.copy(playerCollider.end)
+    controller2.position.copy(playerCollider.end)
+    hand1.position.copy(playerCollider.end)
+    hand2.position.copy(playerCollider.end)
 }
 
 function playerCubeCollision(cube) {
@@ -433,8 +435,8 @@ function setController() {
 
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
-    dolly.add(controller2);
     dolly.add(controller1);
+    dolly.add(controller2);
     scene.add(controller1, controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
@@ -453,10 +455,10 @@ function setController() {
         throwBall(controller1)
     })
 
-    const hand1 = renderer.xr.getHand(0);
+    hand1 = renderer.xr.getHand(0);
     hand1.add(handModelFactory.createHandModel(hand1));
 
-    const hand2 = renderer.xr.getHand(1);
+    hand2 = renderer.xr.getHand(1);
     hand2.add(handModelFactory.createHandModel(hand2));
 
     scene.add(hand1, hand2);
