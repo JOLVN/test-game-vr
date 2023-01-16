@@ -207,9 +207,7 @@ function playerCollisions() {
         playerOnFloor = result.normal.y > 0;
 
         if (!playerOnFloor) {
-
             playerVelocity.addScaledVector(result.normal, - result.normal.dot(playerVelocity));
-
         }
 
         playerCollider.translate(result.normal.multiplyScalar(result.depth));
@@ -239,8 +237,8 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
     dolly.position.copy(playerCollider.end)
-    controller1.position.copy(playerCollider.end)
-    controller2.position.copy(playerCollider.end)
+    controller1.position.multiplyScalar(playerCollider)
+    controller2.position.multiplyScalar(playerCollider.end)
 }
 
 function playerCubeCollision(cube) {
