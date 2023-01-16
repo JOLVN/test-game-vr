@@ -40,7 +40,7 @@ const clock = new THREE.Clock();
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
-scene.fog = new THREE.Fog(0x000000, 0, 50);
+scene.fog = new THREE.Fog(0x000000, 0, 100);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
@@ -387,27 +387,32 @@ function controls(deltaTime) {
         }
     }
 }
-
+const material = new THREE.MeshBasicMaterial({ color: '#2AF8FF' })
 const loader = new GLTFLoader().setPath('./models/gltf/');
 
-loader.load('collision-world.glb', (gltf) => {
+loader.load('map_7.glb', (gltf) => {
+    console.log(gltf.scene);
 
     scene.add(gltf.scene);
 
     worldOctree.fromGraphNode(gltf.scene);
 
     gltf.scene.traverse(child => {
+        // child.material = material
+    })
 
-        if (child.isMesh) {
+    // gltf.scene.traverse(child => {
 
-            child.castShadow = true;
-            child.receiveShadow = true;
+    //     if (child.isMesh) {
 
-            if (child.material.map) {
-                child.material.map.anisotropy = 4;
-            }
-        }
-    });
+    //         child.castShadow = true;
+    //         child.receiveShadow = true;
+
+    //         if (child.material.map) {
+    //             child.material.map.anisotropy = 4;
+    //         }
+    //     }
+    // });
 
     const helper = new OctreeHelper(worldOctree);
     helper.visible = false;
@@ -476,7 +481,7 @@ function setController() {
 }
 
 function moveCamera(deltaTime) {
-    const speedDelta = deltaTime * 25;
+    const speedDelta = deltaTime * 50;
     playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
 }
 
