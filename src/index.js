@@ -241,6 +241,7 @@ function updatePlayer(deltaTime) {
     // controller2.parent = dolly
     hand1.parent = dolly
     hand2.parent = dolly
+    hand1.position.z = 15
 }
 
 function playerCubeCollision(cube) {
