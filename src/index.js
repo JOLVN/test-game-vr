@@ -37,8 +37,8 @@ const container = document.getElementById('container');
 const clock = new THREE.Clock();
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x88ccee);
-scene.fog = new THREE.Fog(0x88ccee, 0, 50);
+scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.Fog(0x000000, 0, 50);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
@@ -48,8 +48,8 @@ const dolly = new THREE.Object3D()
 dolly.position.z = 0.5
 dolly.add(camera)
 
-const dollyCam = new THREE.Object3D()
-camera.add(dollyCam)
+const dummyCam = new THREE.Object3D()
+camera.add(dummyCam)
 
 /**
  * LIGHTS
@@ -462,7 +462,7 @@ function setController() {
 function moveCamera(deltaTime) {
     const speed = 2
     const quaternion = dolly.quaternion.clone()
-    dolly.quaternion.copy(dummyCam.getWorldDirection())
+    // dolly.quaternion.copy(dummyCam.getWorldQuaternion())
     dolly.translateZ(-deltaTime * speed)
     dolly.position.y = 0
     dolly.quaternion.copy(quaternion)
@@ -473,15 +473,14 @@ function animate() {
     const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME
 
     for (let i = 0; i < STEPS_PER_FRAME; i++) {
-        controls(deltaTime)
-        updatePlayer(deltaTime)
+        // controls(deltaTime)
+        // updatePlayer(deltaTime)
         updateCubes(deltaTime)
-        teleportPlayerIfOob()
+        // teleportPlayerIfOob()
     }
 
     if (cameraMoving) {
-        console.log('move');
-        moveCamera(clock.getDelta())
+        moveCamera(deltaTime)
     }
 
     renderer.render(scene, camera)
