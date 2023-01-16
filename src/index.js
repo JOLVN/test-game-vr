@@ -29,6 +29,8 @@ let cameraMoving = false;
 
 const container = document.getElementById('container');
 
+let controller1, controller2
+
 
 /**
  * SETUP SCENE
@@ -236,7 +238,9 @@ function updatePlayer(deltaTime) {
 
     playerCollisions();
 
-    dolly.position.copy(playerCollider.end);
+    dolly.position.copy(playerCollider.end)
+    controller1.position.copy(playerCollider.end)
+    controller2.position.copy(playerCollider.end)
 }
 
 function playerCubeCollision(cube) {
@@ -429,8 +433,8 @@ function setController() {
     const controllerModelFactory = new XRControllerModelFactory();
     const handModelFactory = new XRHandModelFactory();
 
-    const controller1 = renderer.xr.getController(0);
-    const controller2 = renderer.xr.getController(1);
+    controller1 = renderer.xr.getController(0);
+    controller2 = renderer.xr.getController(1);
     dolly.add(controller2);
     dolly.add(controller1);
     scene.add(controller1, controller2);
