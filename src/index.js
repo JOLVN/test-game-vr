@@ -476,7 +476,7 @@ function setController() {
 }
 
 function moveCamera(deltaTime) {
-    const speedDelta = deltaTime * (playerOnFloor ? 25 : 8);
+    const speedDelta = deltaTime * 25;
     playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
 }
 
