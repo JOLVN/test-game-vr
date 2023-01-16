@@ -45,8 +45,9 @@ camera.rotation.order = 'YXZ';
 
 // VR Camera
 const dolly = new THREE.Object3D()
-dolly.position.z = 0.5
+dolly.position.z = 5
 dolly.add(camera)
+scene.add(dolly)
 
 const dummyCam = new THREE.Object3D()
 camera.add(dummyCam)
@@ -465,7 +466,10 @@ function moveCamera(deltaTime) {
     // dolly.quaternion.copy(dummyCam.getWorldQuaternion())
     dolly.translateZ(-deltaTime * speed)
     dolly.position.y = 0
+
+    // Restore original rotation
     dolly.quaternion.copy(quaternion)
+    console.log(dolly.position);
 }
 
 function animate() {
