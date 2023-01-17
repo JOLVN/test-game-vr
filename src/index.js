@@ -186,13 +186,13 @@ function throwBall(controller) {
 
     const impulse = controller ? 35 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     cube.velocity.copy(direction).multiplyScalar(impulse)
-    if (controller) {
-        cube.collider.center.copy(controller.position)
-    }
-    else {
-        cube.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
-        cube.velocity.addScaledVector(playerVelocity, 2)
-    }
+    // if (controller) {
+    //     cube.collider.center.copy(controller.position)
+    // }
+    // else {
+    cube.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
+    cube.velocity.addScaledVector(playerVelocity, 2)
+    // }
 
     cubeIdx = (cubeIdx + 1) % cubes.length
 
@@ -242,7 +242,6 @@ function updatePlayer(deltaTime) {
 
     if (world) world.position.copy(playerCollider.end)
     cubesGroup.position.copy(playerCollider.end)
-    // cubesGroup.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
