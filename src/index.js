@@ -186,7 +186,6 @@ function throwBall(controller) {
     const impulse = controller ? 35 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     if (controller) {
         const pos = dolly.position
-        pos.z -= 1
         pos.y += 1.5
         direction.y -= 0.7
         cube.velocity.copy(direction).multiplyScalar(impulse)
