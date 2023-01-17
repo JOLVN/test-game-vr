@@ -31,6 +31,7 @@ const container = document.getElementById('container');
 
 let controller1, controller2, hand1, hand2
 let world
+let cubesGroup = new THREE.Group()
 
 
 /**
@@ -104,6 +105,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.receiveShadow = true;
 
     scene.add(cube);
+    cubesGroup.add(cube);
 
     cubes.push({
         mesh: cube,
@@ -239,7 +241,7 @@ function updatePlayer(deltaTime) {
 
 
     if (world) world.position.copy(playerCollider.end)
-    cubes.position.copy(playerCollider.end)
+    cubesGroup.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
