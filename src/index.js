@@ -238,7 +238,7 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
 
-    world.position.copy(playerCollider.end)
+    if (world) world.position.copy(playerCollider.end)
     cubes.position.copy(playerCollider.end)
 
     // console.log(scene.position);
