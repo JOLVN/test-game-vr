@@ -45,6 +45,9 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 scene.fog = new THREE.Fog(0x000000, 0, 100);
 
+scene.add(mainGroup)
+
+
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
 camera.position.set(0, 0, 0)
@@ -63,7 +66,7 @@ camera.add(dummyCam)
 
 const fillLight1 = new THREE.HemisphereLight(0x4488bb, 0x002244, 0.5);
 fillLight1.position.set(2, 1, 1);
-scene.add(fillLight1);
+// scene.add(fillLight1);
 mainGroup.add(fillLight1)
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -79,7 +82,7 @@ directionalLight.shadow.mapSize.width = 1024;
 directionalLight.shadow.mapSize.height = 1024;
 directionalLight.shadow.radius = 4;
 directionalLight.shadow.bias = - 0.00006;
-scene.add(directionalLight);
+// scene.add(directionalLight);
 mainGroup.add(directionalLight)
 
 /**
@@ -108,7 +111,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.receiveShadow = true;
 
     cubesGroup.add(cube);
-    scene.add(cubesGroup);
+    // scene.add(cubesGroup);
     mainGroup.add(cubesGroup)
 
     cubes.push({
@@ -400,7 +403,7 @@ const loader = new GLTFLoader().setPath('./models/gltf/');
 
 loader.load('collision-world.glb', (gltf) => {
 
-    scene.add(gltf.scene);
+    // scene.add(gltf.scene);
     mainGroup.add(gltf.scene)
 
     world = gltf.scene
@@ -421,7 +424,7 @@ loader.load('collision-world.glb', (gltf) => {
 
     const helper = new OctreeHelper(worldOctree);
     helper.visible = false;
-    scene.add(helper);
+    // scene.add(helper);
     mainGroup.add(helper)
 
     animate();
@@ -455,7 +458,7 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    scene.add(controller1, controller2);
+    // scene.add(controller1, controller2);
     mainGroup.add(controller1, controller2)
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
