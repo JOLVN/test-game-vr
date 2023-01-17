@@ -240,9 +240,11 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
 
-    if (world) world.position.copy(playerCollider.end)
-    cubesGroup.position.copy(playerCollider.end)
-    controller1.position.copy(playerCollider.end)
+    // if (world) world.position.copy(playerCollider.end)
+    // cubesGroup.position.copy(playerCollider.end)
+    // controller1.position.copy(playerCollider.end)
+
+    scene.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
