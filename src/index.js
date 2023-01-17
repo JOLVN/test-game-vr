@@ -49,8 +49,6 @@ camera.position.set(0, 0, 0)
 // VR Camera
 const dolly = new THREE.Object3D()
 dolly.position.z = 5
-dolly.add(controller1);
-dolly.add(controller2);
 dolly.add(camera)
 scene.add(dolly)
 
@@ -240,14 +238,9 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
     // scene.position.copy(playerCollider.end)
+
     // console.log(scene.position);
     dolly.position.copy(playerCollider.end)
-    // controller1.parent = dolly
-    // controller2.parent = dolly
-    // hand1.parent = dolly
-    // hand2.parent = dolly
-    // controller1.position.z = 5
-    // hand1.position.z = 5
 }
 
 function playerCubeCollision(cube) {
@@ -450,6 +443,9 @@ function setController() {
 
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
+
+    dolly.add(controller1);
+    dolly.add(controller2);
 
     scene.add(controller1, controller2);
 
