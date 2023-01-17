@@ -183,7 +183,7 @@ function throwBall(controller) {
     if (controller) console.log(controller);
 
 
-    const impulse = controller ? 10 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    const impulse = controller ? 30 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     if (controller) {
         const pos = dolly.position
         pos.z -= 1
