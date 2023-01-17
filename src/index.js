@@ -180,13 +180,14 @@ function throwBall(controller) {
 
     camera.getWorldDirection(playerDirection)
     const direction = controller ? controller.position : playerDirection
-    if (controller) console.log(controller.position);
+    if (controller) console.log(controller);
 
 
-    const impulse = controller ? 1 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
+    const impulse = controller ? 30 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     if (controller) {
         const pos = dolly.position
         pos.z += 1
+        cube.velocity.copy(direction).multiplyScalar(impulse)
         cube.collider.center.copy(dolly.position)
     }
     else {
