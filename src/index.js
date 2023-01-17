@@ -30,7 +30,7 @@ let cameraMoving = false;
 const container = document.getElementById('container');
 
 let controller1, controller2, hand1, hand2
-let world = new THREE.Group()
+let world
 
 
 /**
@@ -104,7 +104,6 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.receiveShadow = true;
 
     scene.add(cube);
-    world.add(cube)
 
     cubes.push({
         mesh: cube,
@@ -240,6 +239,7 @@ function updatePlayer(deltaTime) {
 
 
     world.position.copy(playerCollider.end)
+    cubes.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
@@ -391,9 +391,9 @@ const loader = new GLTFLoader().setPath('./models/gltf/');
 
 loader.load('collision-world.glb', (gltf) => {
 
-    world.add(gltf.scene);
     scene.add(gltf.scene);
 
+    world = gltf.scene
     worldOctree.fromGraphNode(gltf.scene);
 
     gltf.scene.traverse(child => {
