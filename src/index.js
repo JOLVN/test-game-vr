@@ -44,10 +44,10 @@ scene.fog = new THREE.Fog(0x000000, 0, 100);
 
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
-camera.position.set(0, 0, 0)
 
 // VR Camera
 const dolly = new THREE.Object3D()
+dolly.position.set(0, 0, -4)
 dolly.add(camera)
 scene.add(dolly)
 
@@ -234,11 +234,9 @@ function updatePlayer(deltaTime) {
     const deltaPosition = playerVelocity.clone().multiplyScalar(deltaTime);
     playerCollider.translate(deltaPosition);
 
-
     playerCollisions();
 
     dolly.position.copy(playerCollider.end)
-    controller1.position.copy(dolly)
 }
 
 function playerCubeCollision(cube) {
@@ -440,12 +438,12 @@ function setController() {
     controller2 = renderer.xr.getController(1);
 
     // dolly.add(controller1);
-    scene.add(controller1, controller2);
+    scene.add(controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
     const controllerGrip2 = renderer.xr.getControllerGrip(1);
-    scene.add(controllerGrip1, controllerGrip2);
+    dolly.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
         cameraMoving = true
