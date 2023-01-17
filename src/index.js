@@ -49,7 +49,6 @@ camera.position.set(0, 0, 0)
 
 // VR Camera
 const dolly = new THREE.Object3D()
-dolly.position.z = 5
 dolly.add(camera)
 // scene.add(dolly)
 
@@ -239,7 +238,7 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
 
-    if (world) world.position.copy(playerCollider.end)
+    scene.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
@@ -387,16 +386,15 @@ function controls(deltaTime) {
         }
     }
 }
-const material = new THREE.MeshBasicMaterial({ color: '#2AF8FF' })
 const loader = new GLTFLoader().setPath('./models/gltf/');
 
 loader.load('collision-world.glb', (gltf) => {
 
     world = gltf.scene
+    console.log(world);
     scene.add(world);
 
     worldOctree.fromGraphNode(world);
-
 
     world.traverse(child => {
 
@@ -445,8 +443,6 @@ function setController() {
 
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
-
-    dolly.add(controller1);
 
     scene.add(controller1, controller2);
 
