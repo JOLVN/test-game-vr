@@ -30,6 +30,7 @@ let cameraMoving = false;
 const container = document.getElementById('container');
 
 let controller1, controller2, hand1, hand2
+let world
 
 
 /**
@@ -50,7 +51,7 @@ camera.position.set(0, 0, 0)
 const dolly = new THREE.Object3D()
 dolly.position.z = 5
 dolly.add(camera)
-scene.add(dolly)
+// scene.add(dolly)
 
 const dummyCam = new THREE.Object3D()
 camera.add(dummyCam)
@@ -237,10 +238,11 @@ function updatePlayer(deltaTime) {
 
     playerCollisions();
 
-    // scene.position.copy(playerCollider.end)
+
+    if (world) world.position.copy(playerCollider.end)
 
     // console.log(scene.position);
-    dolly.position.copy(playerCollider.end)
+    // dolly.position.copy(playerCollider.end)
 }
 
 function playerCubeCollision(cube) {
@@ -389,14 +391,14 @@ const material = new THREE.MeshBasicMaterial({ color: '#2AF8FF' })
 const loader = new GLTFLoader().setPath('./models/gltf/');
 
 loader.load('collision-world.glb', (gltf) => {
-    console.log(gltf.scene);
 
-    scene.add(gltf.scene);
+    world = gltf.scene
+    scene.add(world);
 
-    worldOctree.fromGraphNode(gltf.scene);
+    worldOctree.fromGraphNode(world);
 
 
-    gltf.scene.traverse(child => {
+    world.traverse(child => {
 
         if (child.isMesh) {
 
@@ -445,7 +447,6 @@ function setController() {
     controller2 = renderer.xr.getController(1);
 
     dolly.add(controller1);
-    dolly.add(controller2);
 
     scene.add(controller1, controller2);
 
@@ -474,12 +475,14 @@ function setController() {
     hand2 = renderer.xr.getHand(1);
     hand2.add(handModelFactory.createHandModel(hand2));
 
+    dolly.add(hand1)
+
     scene.add(hand1, hand2);
 }
 
 function moveCamera(deltaTime) {
     const speedDelta = deltaTime * 50;
-    playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
+    playerVelocity.add(getForwardVector().multiplyScalar(-speedDelta))
 }
 
 
