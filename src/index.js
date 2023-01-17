@@ -50,7 +50,7 @@ camera.position.set(0, 0, 0)
 
 // VR Camera
 const dolly = new THREE.Object3D()
-dolly.add(camera)
+// dolly.add(camera)
 // scene.add(dolly)
 
 const dummyCam = new THREE.Object3D()
@@ -104,8 +104,8 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.castShadow = true;
     cube.receiveShadow = true;
 
-    scene.add(cube);
     cubesGroup.add(cube);
+    scene.add(cubesGroup);
 
     cubes.push({
         mesh: cube,
@@ -241,6 +241,7 @@ function updatePlayer(deltaTime) {
 
 
     if (world) world.position.copy(playerCollider.end)
+    cubesGroup.position.copy(playerCollider.end)
     // cubesGroup.position.copy(playerCollider.end)
 
     // console.log(scene.position);
@@ -431,7 +432,7 @@ function teleportPlayerIfOob() {
 
 function jump() {
     if (dolly.position.y < 7) {
-        playerVelocity.y = - 15;
+        playerVelocity.y = 15;
     }
 }
 
