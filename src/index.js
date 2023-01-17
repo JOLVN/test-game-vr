@@ -443,8 +443,7 @@ function setController() {
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
     const controllerGrip2 = renderer.xr.getControllerGrip(1);
-    dolly.add(controllerGrip1)
-    scene.add(controllerGrip2);
+    scene.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
         cameraMoving = true
@@ -467,7 +466,8 @@ function setController() {
     hand2.add(handModelFactory.createHandModel(hand2));
 
 
-    scene.add(hand1, hand2);
+    dolly.add(hand1)
+    scene.add(hand2);
 }
 
 function moveCamera(deltaTime) {
