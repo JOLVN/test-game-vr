@@ -236,14 +236,6 @@ function updatePlayer(deltaTime) {
 
     playerCollisions();
 
-
-    // if (world) world.position.copy(playerCollider.end)
-    // cubesGroup.position.copy(playerCollider.end)
-    // controller1.position.copy(playerCollider.end)
-
-    // scene.position.copy(playerCollider.end)
-
-    // console.log(scene.position);
     dolly.position.copy(playerCollider.end)
 }
 
@@ -445,13 +437,13 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    dolly.add(controller1)
+    dolly.add(controller1);
     scene.add(controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
     const controllerGrip2 = renderer.xr.getControllerGrip(1);
-    dolly.add(controllerGrip2)
+    dolly.add(controllerGrip1)
     scene.add(controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
@@ -475,8 +467,7 @@ function setController() {
     hand2.add(handModelFactory.createHandModel(hand2));
 
 
-    dolly.add(hand1)
-    scene.add(hand2);
+    scene.add(hand1, hand2);
 }
 
 function moveCamera(deltaTime) {
