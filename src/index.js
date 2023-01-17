@@ -437,7 +437,7 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    // dolly.add(controller1);
+    scene.add(controller1);
     scene.add(controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
