@@ -25,7 +25,7 @@ const cubeGeometry = new THREE.BoxGeometry(CUBE_RADIUS, CUBE_RADIUS, CUBE_RADIUS
 const cubes = [];
 let cubeIdx = 0;
 
-let = false;
+let cameraMoving = false;
 
 const container = document.getElementById('container');
 
@@ -456,13 +456,13 @@ function setController() {
     scene.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
-         = true
+        cameraMoving = true
     })
     controller2.addEventListener('squeeze', () => {
         jump()
     })
     controller2.addEventListener('selectend', () => {
-         = false
+        cameraMoving = false
     })
 
     controller1.addEventListener('selectstart', () => {
@@ -501,7 +501,7 @@ function animate() {
     }
 
 
-    if () {
+    if (cameraMoving) {
         moveCamera(deltaTime)
     }
 
