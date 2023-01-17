@@ -29,7 +29,7 @@ let cameraMoving = false;
 
 const container = document.getElementById('container');
 
-let controller1, controller2, hand1, hand2
+let controller1, controller2, controllerGrip1, controllerGrip2, hand1, hand2
 
 
 /**
@@ -179,13 +179,14 @@ function throwBall(controller) {
     const cube = cubes[cubeIdx]
 
     camera.getWorldDirection(playerDirection)
-    const direction = controller ? controller.position : playerDirection
+    const direction = controller ? dolly.position : playerDirection
 
 
     const impulse = controller ? 35 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     cube.velocity.copy(direction).multiplyScalar(impulse)
     if (controller) {
-        cube.collider.center.copy(controller.position)
+        console.log(controller.position);
+        cube.collider.center.copy(dolly.position)
     }
     else {
         cube.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
@@ -437,12 +438,12 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    scene.add(controller1);
+    // scene.add(controller1);
     scene.add(controller2);
 
-    const controllerGrip1 = renderer.xr.getControllerGrip(0);
+    controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
-    const controllerGrip2 = renderer.xr.getControllerGrip(1);
+    controllerGrip2 = renderer.xr.getControllerGrip(1);
     dolly.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
@@ -456,7 +457,7 @@ function setController() {
     })
 
     controller1.addEventListener('selectstart', () => {
-        throwBall(controller1)
+        throwBall(controllerGrip1)
     })
 
     hand1 = renderer.xr.getHand(0);
