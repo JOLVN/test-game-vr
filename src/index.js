@@ -104,7 +104,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.receiveShadow = true;
 
     scene.add(cube);
-    // world.add(cube)
+    world.add(cube)
 
     cubes.push({
         mesh: cube,
@@ -239,7 +239,7 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
 
-    scene.position.copy(playerCollider.end)
+    world.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
