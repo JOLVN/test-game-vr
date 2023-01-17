@@ -30,9 +30,6 @@ let cameraMoving = false;
 const container = document.getElementById('container');
 
 let controller1, controller2, hand1, hand2
-let world
-let mainGroup = new THREE.Group()
-let cubesGroup = new THREE.Group()
 
 
 /**
@@ -45,17 +42,14 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
 scene.fog = new THREE.Fog(0x000000, 0, 100);
 
-scene.add(mainGroup)
-
-
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.rotation.order = 'YXZ';
 camera.position.set(0, 0, 0)
 
 // VR Camera
 const dolly = new THREE.Object3D()
-// dolly.add(camera)
-// scene.add(dolly)
+dolly.add(camera)
+scene.add(dolly)
 
 const dummyCam = new THREE.Object3D()
 camera.add(dummyCam)
@@ -66,8 +60,7 @@ camera.add(dummyCam)
 
 const fillLight1 = new THREE.HemisphereLight(0x4488bb, 0x002244, 0.5);
 fillLight1.position.set(2, 1, 1);
-// scene.add(fillLight1);
-mainGroup.add(fillLight1)
+scene.add(fillLight1);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 directionalLight.position.set(- 5, 25, - 1);
@@ -82,8 +75,7 @@ directionalLight.shadow.mapSize.width = 1024;
 directionalLight.shadow.mapSize.height = 1024;
 directionalLight.shadow.radius = 4;
 directionalLight.shadow.bias = - 0.00006;
-// scene.add(directionalLight);
-mainGroup.add(directionalLight)
+scene.add(directionalLight);
 
 /**
  * RENDERER
@@ -110,9 +102,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.castShadow = true;
     cube.receiveShadow = true;
 
-    cubesGroup.add(cube);
-    // scene.add(cubesGroup);
-    mainGroup.add(cubesGroup)
+    scene.add(cube);
 
     cubes.push({
         mesh: cube,
@@ -251,10 +241,10 @@ function updatePlayer(deltaTime) {
     // cubesGroup.position.copy(playerCollider.end)
     // controller1.position.copy(playerCollider.end)
 
-    mainGroup.position.copy(playerCollider.end)
+    // scene.position.copy(playerCollider.end)
 
     // console.log(scene.position);
-    // dolly.position.copy(playerCollider.end)
+    dolly.position.copy(playerCollider.end)
 }
 
 function playerCubeCollision(cube) {
@@ -403,10 +393,8 @@ const loader = new GLTFLoader().setPath('./models/gltf/');
 
 loader.load('collision-world.glb', (gltf) => {
 
-    // scene.add(gltf.scene);
-    mainGroup.add(gltf.scene)
+    scene.add(gltf.scene);
 
-    world = gltf.scene
     worldOctree.fromGraphNode(gltf.scene);
 
     gltf.scene.traverse(child => {
@@ -424,8 +412,7 @@ loader.load('collision-world.glb', (gltf) => {
 
     const helper = new OctreeHelper(worldOctree);
     helper.visible = false;
-    // scene.add(helper);
-    mainGroup.add(helper)
+    scene.add(helper);
 
     animate();
 
@@ -463,9 +450,7 @@ function setController() {
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
     const controllerGrip2 = renderer.xr.getControllerGrip(1);
-    // scene.add(controllerGrip1, controllerGrip2);
-    mainGroup.add(controllerGrip1, controllerGrip1)
-
+    scene.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
         cameraMoving = true
@@ -494,7 +479,7 @@ function setController() {
 
 function moveCamera(deltaTime) {
     const speedDelta = deltaTime * 50;
-    playerVelocity.add(getForwardVector().multiplyScalar(-speedDelta))
+    playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
 }
 
 
