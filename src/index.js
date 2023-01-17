@@ -186,7 +186,7 @@ function throwBall(controller) {
     cube.velocity.copy(direction).multiplyScalar(impulse)
     if (controller) {
         console.log(controller.position);
-        cube.collider.center.copy(dolly.position)
+        cube.collider.center.copy(controller.position)
     }
     else {
         cube.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
