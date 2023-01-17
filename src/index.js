@@ -25,7 +25,7 @@ const cubeGeometry = new THREE.BoxGeometry(CUBE_RADIUS, CUBE_RADIUS, CUBE_RADIUS
 const cubes = [];
 let cubeIdx = 0;
 
-let cameraMoving = false;
+let = false;
 
 const container = document.getElementById('container');
 
@@ -245,6 +245,7 @@ function updatePlayer(deltaTime) {
 
     // console.log(scene.position);
     dolly.position.copy(playerCollider.end)
+    controller1.position.copy(playerCollider.end)
 }
 
 function playerCubeCollision(cube) {
@@ -455,13 +456,13 @@ function setController() {
     scene.add(controllerGrip1, controllerGrip2);
 
     controller2.addEventListener('selectstart', () => {
-        cameraMoving = true
+         = true
     })
     controller2.addEventListener('squeeze', () => {
         jump()
     })
     controller2.addEventListener('selectend', () => {
-        cameraMoving = false
+         = false
     })
 
     controller1.addEventListener('selectstart', () => {
@@ -500,7 +501,7 @@ function animate() {
     }
 
 
-    if (cameraMoving) {
+    if () {
         moveCamera(deltaTime)
     }
 
