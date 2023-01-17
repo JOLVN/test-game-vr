@@ -241,7 +241,7 @@ function updatePlayer(deltaTime) {
 
 
     if (world) world.position.copy(playerCollider.end)
-    cubesGroup.position.copy(playerCollider.end)
+    // cubesGroup.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
@@ -430,8 +430,8 @@ function teleportPlayerIfOob() {
 }
 
 function jump() {
-    if (dolly.position.y < 5) {
-        playerVelocity.y = 15;
+    if (dolly.position.y < 7) {
+        playerVelocity.y = - 15;
     }
 }
 
@@ -473,7 +473,7 @@ function setController() {
     hand2 = renderer.xr.getHand(1);
     hand2.add(handModelFactory.createHandModel(hand2));
 
-    dolly.add(hand1)
+    // dolly.add(hand1)
 
     scene.add(hand1, hand2);
 }
