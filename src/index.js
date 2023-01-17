@@ -31,6 +31,7 @@ const container = document.getElementById('container');
 
 let controller1, controller2, hand1, hand2
 let world
+let mainGroup = new THREE.Group()
 let cubesGroup = new THREE.Group()
 
 
@@ -63,6 +64,7 @@ camera.add(dummyCam)
 const fillLight1 = new THREE.HemisphereLight(0x4488bb, 0x002244, 0.5);
 fillLight1.position.set(2, 1, 1);
 scene.add(fillLight1);
+mainGroup.add(fillLight1)
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 directionalLight.position.set(- 5, 25, - 1);
@@ -78,6 +80,7 @@ directionalLight.shadow.mapSize.height = 1024;
 directionalLight.shadow.radius = 4;
 directionalLight.shadow.bias = - 0.00006;
 scene.add(directionalLight);
+mainGroup.add(directionalLight)
 
 /**
  * RENDERER
@@ -106,6 +109,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
 
     cubesGroup.add(cube);
     scene.add(cubesGroup);
+    mainGroup.add(cubesGroup)
 
     cubes.push({
         mesh: cube,
@@ -244,7 +248,7 @@ function updatePlayer(deltaTime) {
     // cubesGroup.position.copy(playerCollider.end)
     // controller1.position.copy(playerCollider.end)
 
-    scene.position.copy(playerCollider.end)
+    mainGroup.position.copy(playerCollider.end)
 
     // console.log(scene.position);
     // dolly.position.copy(playerCollider.end)
@@ -397,6 +401,7 @@ const loader = new GLTFLoader().setPath('./models/gltf/');
 loader.load('collision-world.glb', (gltf) => {
 
     scene.add(gltf.scene);
+    mainGroup.add(gltf.scene)
 
     world = gltf.scene
     worldOctree.fromGraphNode(gltf.scene);
@@ -417,6 +422,7 @@ loader.load('collision-world.glb', (gltf) => {
     const helper = new OctreeHelper(worldOctree);
     helper.visible = false;
     scene.add(helper);
+    mainGroup.add(helper)
 
     animate();
 
@@ -450,6 +456,7 @@ function setController() {
     controller2 = renderer.xr.getController(1);
 
     scene.add(controller1, controller2);
+    mainGroup.add(controller1, controller2)
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
