@@ -104,7 +104,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.receiveShadow = true;
 
     scene.add(cube);
-    world.add(cube)
+    // world.add(cube)
 
     cubes.push({
         mesh: cube,
