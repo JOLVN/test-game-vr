@@ -458,13 +458,14 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    // scene.add(controller1, controller2);
-    mainGroup.add(controller1, controller2)
+    scene.add(controller1, controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
     const controllerGrip2 = renderer.xr.getControllerGrip(1);
-    scene.add(controllerGrip1, controllerGrip2);
+    // scene.add(controllerGrip1, controllerGrip2);
+    mainGroup.add(controllerGrip1, controllerGrip1)
+
 
     controller2.addEventListener('selectstart', () => {
         cameraMoving = true
