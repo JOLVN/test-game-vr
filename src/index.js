@@ -30,7 +30,7 @@ let cameraMoving = false;
 const container = document.getElementById('container');
 
 let controller1, controller2, hand1, hand2
-let world
+let world = new THREE.Group()
 
 
 /**
@@ -104,6 +104,7 @@ for (let i = 0; i < NUM_CUBES; i++) {
     cube.receiveShadow = true;
 
     scene.add(cube);
+    world.add(cube)
 
     cubes.push({
         mesh: cube,
@@ -390,13 +391,12 @@ const loader = new GLTFLoader().setPath('./models/gltf/');
 
 loader.load('collision-world.glb', (gltf) => {
 
-    world = gltf.scene
-    console.log(world);
-    scene.add(world);
+    world.add(gltf.scene);
+    scene.add(gltf.scene);
 
-    worldOctree.fromGraphNode(world);
+    worldOctree.fromGraphNode(gltf.scene);
 
-    world.traverse(child => {
+    gltf.scene.traverse(child => {
 
         if (child.isMesh) {
 
