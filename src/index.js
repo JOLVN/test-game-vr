@@ -179,16 +179,18 @@ function throwBall(controller) {
     const cube = cubes[cubeIdx]
 
     camera.getWorldDirection(playerDirection)
-    const direction = controller ? dolly.position : playerDirection
+    const direction = controller ? controller.position : playerDirection
+    if (controller) console.log(controller.position);
 
 
-    const impulse = controller ? 35 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
-    cube.velocity.copy(direction).multiplyScalar(impulse)
+    const impulse = controller ? 1 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     if (controller) {
-        console.log(controller.position);
-        cube.collider.center.copy(controller.position)
+        const pos = dolly.position
+        pos.z += 1
+        cube.collider.center.copy(dolly.position)
     }
     else {
+        cube.velocity.copy(direction).multiplyScalar(impulse)
         cube.collider.center.copy(playerCollider.end).addScaledVector(direction, playerCollider.radius * 1.5)
         cube.velocity.addScaledVector(playerVelocity, 2)
     }
@@ -438,7 +440,7 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    // scene.add(controller1);
+    scene.add(controller1);
     scene.add(controller2);
 
     controllerGrip1 = renderer.xr.getControllerGrip(0);
@@ -457,7 +459,7 @@ function setController() {
     })
 
     controller1.addEventListener('selectstart', () => {
-        throwBall(controllerGrip1)
+        throwBall(controller1)
     })
 
     hand1 = renderer.xr.getHand(0);
