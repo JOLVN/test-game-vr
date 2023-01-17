@@ -49,6 +49,8 @@ camera.position.set(0, 0, 0)
 // VR Camera
 const dolly = new THREE.Object3D()
 dolly.position.z = 5
+dolly.add(controller1);
+dolly.add(controller2);
 dolly.add(camera)
 scene.add(dolly)
 
@@ -234,15 +236,18 @@ function updatePlayer(deltaTime) {
     const deltaPosition = playerVelocity.clone().multiplyScalar(deltaTime);
     playerCollider.translate(deltaPosition);
 
+
     playerCollisions();
 
+    // scene.position.copy(playerCollider.end)
+    // console.log(scene.position);
     dolly.position.copy(playerCollider.end)
     // controller1.parent = dolly
     // controller2.parent = dolly
-    hand1.parent = dolly
-    hand2.parent = dolly
-    controller1.position.z = 5
-    hand1.position.z = 5
+    // hand1.parent = dolly
+    // hand2.parent = dolly
+    // controller1.position.z = 5
+    // hand1.position.z = 5
 }
 
 function playerCubeCollision(cube) {
@@ -390,29 +395,26 @@ function controls(deltaTime) {
 const material = new THREE.MeshBasicMaterial({ color: '#2AF8FF' })
 const loader = new GLTFLoader().setPath('./models/gltf/');
 
-loader.load('map_7.glb', (gltf) => {
+loader.load('collision-world.glb', (gltf) => {
     console.log(gltf.scene);
 
     scene.add(gltf.scene);
 
     worldOctree.fromGraphNode(gltf.scene);
 
+
     gltf.scene.traverse(child => {
-        // child.material = material
-    })
 
-    // gltf.scene.traverse(child => {
+        if (child.isMesh) {
 
-    //     if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
 
-    //         child.castShadow = true;
-    //         child.receiveShadow = true;
-
-    //         if (child.material.map) {
-    //             child.material.map.anisotropy = 4;
-    //         }
-    //     }
-    // });
+            if (child.material.map) {
+                child.material.map.anisotropy = 4;
+            }
+        }
+    });
 
     const helper = new OctreeHelper(worldOctree);
     helper.visible = false;
@@ -448,8 +450,7 @@ function setController() {
 
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
-    dolly.add(controller1);
-    dolly.add(controller2);
+
     scene.add(controller1, controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
@@ -485,6 +486,7 @@ function moveCamera(deltaTime) {
     playerVelocity.add(getForwardVector().multiplyScalar(speedDelta))
 }
 
+
 function animate() {
 
     const deltaTime = Math.min(0.05, clock.getDelta()) / STEPS_PER_FRAME
@@ -498,6 +500,7 @@ function animate() {
         updateCubes(deltaTime)
         teleportPlayerIfOob()
     }
+
 
     if (cameraMoving) {
         moveCamera(deltaTime)
