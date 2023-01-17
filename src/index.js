@@ -245,7 +245,9 @@ function updatePlayer(deltaTime) {
 
     // console.log(scene.position);
     dolly.position.copy(playerCollider.end)
-    controller1.position.copy(playerCollider.end)
+    const controllerPosition = playerCollider.end
+    controllerPosition.z += 1
+    controller1.position.copy(controllerPosition)
 }
 
 function playerCubeCollision(cube) {
