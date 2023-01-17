@@ -51,6 +51,7 @@ const dolly = new THREE.Object3D()
 dolly.add(camera)
 scene.add(dolly)
 
+
 const dummyCam = new THREE.Object3D()
 camera.add(dummyCam)
 
@@ -237,6 +238,7 @@ function updatePlayer(deltaTime) {
     playerCollisions();
 
     dolly.position.copy(playerCollider.end)
+    controller1.position.copy(dolly)
 }
 
 function playerCubeCollision(cube) {
@@ -437,8 +439,8 @@ function setController() {
     controller1 = renderer.xr.getController(0);
     controller2 = renderer.xr.getController(1);
 
-    camera.add(controller1);
-    scene.add(controller2);
+    // dolly.add(controller1);
+    scene.add(controller1, controller2);
 
     const controllerGrip1 = renderer.xr.getControllerGrip(0);
     controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
