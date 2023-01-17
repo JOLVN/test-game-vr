@@ -188,7 +188,7 @@ function throwBall(controller) {
         const pos = dolly.position
         pos.z -= 1
         cube.velocity.copy(direction).multiplyScalar(impulse)
-        cube.collider.center.copy(controller.position)
+        cube.collider.center.copy(dolly.position)
     }
     else {
         cube.velocity.copy(direction).multiplyScalar(impulse)
