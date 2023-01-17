@@ -190,6 +190,7 @@ function throwBall(controller) {
         // pos.y += 1.7
         const vel = direction;
         vel.y = 0.5;
+        vel.x = 0;
         cube.velocity.copy(vel).multiplyScalar(impulse)
         cube.collider.center.copy(dolly.position);
     }
