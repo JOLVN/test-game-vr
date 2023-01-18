@@ -179,15 +179,14 @@ function throwBall(controller) {
     const cube = cubes[cubeIdx]
 
     camera.getWorldDirection(playerDirection)
-    const direction = controller ? controller.position : playerDirection
+    const direction = playerDirection
     if (controller) console.log(controller);
 
 
     const impulse = controller ? 35 : 15 + 30 * (1 - Math.exp((mouseTime - performance.now()) * 0.001))
     if (controller) {
-        const vel = direction;
-        vel.z -= 0.5
-        cube.velocity.copy(vel).multiplyScalar(impulse)
+        cube.velocity.copy(direction).multiplyScalar(impulse)
+        // cube.velocity.copy(getForwardVector().multiplyScalar(impulse))
         cube.collider.center.copy(dolly.position);
     }
     else {
